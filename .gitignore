@@ -89,6 +89,12 @@ ENV/
 env.bak/
 venv.bak/
 
+# API Keys and secrets
+.env
+.env.local
+.env.production
+.env.staging
+
 # Spyder project settings
 .spyderproject
 .spyproject

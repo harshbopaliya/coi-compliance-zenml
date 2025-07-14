@@ -10,3 +10,7 @@ pdf2image
 pydantic
 typer
 rich
+flask
+python-dotenv
+google-generativeai
+markdown

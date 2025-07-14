@@ -10,6 +10,7 @@ Automated pipeline for Injala to ingest Certificate of Insurance PDFs, extract f
 - **Compliance Validation**: Validate against business rules
 - **Report Generation**: Generate compliance reports in JSON/CSV format
 - **Artifact Tracking**: Track all artifacts and runs with ZenML dashboard
+- **AI Analysis**: Utilize Google Gemini 2.0 for enhanced document analysis and summarization
 - **Rapid Iteration**: Enable fast development with warp watch
 
 ## Project Structure
@@ -35,7 +36,15 @@ pip install -r requirements.txt
 zenml init
 ```
 
-### 3. Create ZenML Pipeline and Steps
+### 3. Set Environment Variables
+Create a `.env` file in the project root and add your Gemini API key:
+```
+GEMINI_API_KEY=your_actual_gemini_api_key
+FLASK_ENV=development
+FLASK_DEBUG=True
+```
+
+### 4. Create ZenML Pipeline and Steps
 ```bash
 zenml pipeline create coi_compliance_pipeline
 zenml step create ingest_step
@@ -85,3 +94,31 @@ View results in ZenML dashboard:
 ```bash
 zenml up
 ```
+
+## New Features
+
+### Flask API Server
+Start the Flask development server for API access:
+```bash
+python app.py
+```
+
+The API provides endpoints for:
+- `/analyze` - Analyze COI documents with Gemini AI
+- `/summary` - Generate summaries of COI documents
+
+### Gemini AI Integration
+The pipeline now includes AI-powered analysis using Google Gemini 2.0:
+- **Document Analysis**: Comprehensive analysis of COI documents
+- **Summarization**: Executive summaries for stakeholders
+- **Key Insights**: Extract critical insights from documents
+- **Risk Assessment**: AI-powered risk evaluation
+
+### Enhanced Pipeline Steps
+1. **Ingest COI PDFs** from S3/local storage
+2. **OCR extraction** using EasyOCR for text extraction
+3. **Parse fields** including policy details, limits, and expiry dates
+4. **Validate compliance** against predefined business rules
+5. **AI Analysis** using Gemini 2.0 for insights and summaries
+6. **Generate enhanced reports** with AI insights in JSON/CSV format
+7. **Track artifacts and runs** with ZenML dashboard for reproducibility
