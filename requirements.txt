@@ -1,0 +1,11 @@
+zenml
+pandas
+easyocr
+spacy
+mlflow
+python-multipart
+Pillow
+PyPDF2
+pydantic
+typer
+rich

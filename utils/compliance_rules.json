@@ -1,0 +1,52 @@
+{
+  "required_fields": [
+    "policy_number",
+    "insurance_company",
+    "insured_name",
+    "policy_period"
+  ],
+  "minimum_coverage_limits": {
+    "general_liability": 1000000,
+    "professional_liability": 1000000,
+    "workers_compensation": 1000000
+  },
+  "policy_expiration_warning_days": 30,
+  "required_additional_insureds": [
+    "Injala LLC"
+  ],
+  "required_cancellation_notice_days": 30,
+  "acceptable_insurance_companies": [
+    "State Farm",
+    "Allstate",
+    "Geico",
+    "Progressive",
+    "Liberty Mutual",
+    "Travelers",
+    "Nationwide",
+    "USAA",
+    "Farmers",
+    "American Family"
+  ],
+  "coverage_types": {
+    "general_liability": {
+      "required": true,
+      "minimum_limit": 1000000
+    },
+    "professional_liability": {
+      "required": true,
+      "minimum_limit": 1000000
+    },
+    "workers_compensation": {
+      "required": true,
+      "minimum_limit": 1000000
+    },
+    "commercial_auto": {
+      "required": false,
+      "minimum_limit": 500000
+    },
+    "cyber_liability": {
+      "required": false,
+      "minimum_limit": 1000000
+    }
+  }
+}
