@@ -9,6 +9,14 @@ This pipeline orchestrates the entire COI compliance validation workflow:
 5. Generate compliance reports
 """
 
+import sys
+import os
+from pathlib import Path
+
+# Add the parent directory to the Python path
+parent_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(parent_dir))
+
 from zenml import pipeline
 from steps.ingest_step import ingest_coi_pdfs
 from steps.ocr_step import extract_text_from_pdf
@@ -65,6 +73,20 @@ def coi_compliance_pipeline(
 
 
 if __name__ == "__main__":
+    # Change to the parent directory for proper execution
+    os.chdir(parent_dir)
+    
+    print("🚀 Running COI Compliance Pipeline directly...")
+    print("=" * 60)
+    
     # Run the pipeline
-    pipeline = coi_compliance_pipeline()
-    pipeline.run()
+    try:
+        result = coi_compliance_pipeline()
+        print("\n✅ Pipeline executed successfully!")
+        print(f"📝 Pipeline Run ID: {result.id}")
+        print(f"🔗 Pipeline Run Name: {result.name}")
+        print(f"📈 Pipeline Status: {result.status}")
+    except Exception as e:
+        print(f"\n❌ Pipeline failed with error: {e}")
+        import traceback
+        traceback.print_exc()

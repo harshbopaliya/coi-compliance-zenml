@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  coi-pipeline:
+    build: .
+    container_name: coi-compliance-pipeline
+    ports:
+      - "5000:5000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FLASK_ENV=production
+      - FLASK_DEBUG=False
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - coi-network
+
+  coi-pipeline-dev:
+    build: .
+    container_name: coi-compliance-pipeline-dev
+    ports:
+      - "5001:5000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FLASK_ENV=development
+      - FLASK_DEBUG=True
+    volumes:
+      - .:/app
+    command: ["python", "app.py"]
+    networks:
+      - coi-network
+
+networks:
+  coi-network:
+    driver: bridge
+
+volumes:
+  coi-data:
+  coi-reports:
+  coi-logs:

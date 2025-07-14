@@ -70,14 +70,14 @@ class GeminiService:
             return {
                 "analysis": response.text,
                 "status": "success",
-                "model": "gemini-2.0-flash-exp"
+                "model": "gemini-2.0-flash"
             }
         except Exception as e:
             logger.error(f"Error analyzing COI document: {e}")
             return {
                 "analysis": f"Error analyzing document: {str(e)}",
                 "status": "error",
-                "model": "gemini-2.0-flash-exp"
+                "model": "gemini-2.0-flash"
             }
     
     def generate_summary(self, document_text: str, compliance_results: Dict[str, Any]) -> Dict[str, Any]:
@@ -98,14 +98,14 @@ class GeminiService:
             return {
                 "summary": response.text,
                 "status": "success",
-                "model": "gemini-2.0-flash-exp"
+                "model": "gemini-2.0-flash"
             }
         except Exception as e:
             logger.error(f"Error generating summary: {e}")
             return {
                 "summary": f"Error generating summary: {str(e)}",
                 "status": "error",
-                "model": "gemini-2.0-flash-exp"
+                "model": "gemini-2.0-flash"
             }
     
     def _build_analysis_prompt(self, document_text: str, parsed_fields: Dict[str, Any]) -> str:
