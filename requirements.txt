@@ -6,6 +6,7 @@ mlflow
 python-multipart
 Pillow
 PyPDF2
+pdf2image
 pydantic
 typer
 rich

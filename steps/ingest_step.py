@@ -8,12 +8,16 @@ This step handles ingesting COI PDF files from various sources:
 """
 
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from pathlib import Path
 from zenml import step
 from zenml.logger import get_logger
-import boto3
-from botocore.exceptions import ClientError
+try:
+    import boto3
+    from botocore.exceptions import ClientError
+except ImportError:
+    boto3 = None
+    ClientError = None
 
 logger = get_logger(__name__)
 
@@ -21,9 +25,9 @@ logger = get_logger(__name__)
 @step
 def ingest_coi_pdfs(
     data_path: str,
-    s3_bucket: str = None,
+    s3_bucket: Optional[str] = None,
     s3_prefix: str = "coi-pdfs/",
-    file_extensions: List[str] = [".pdf"]
+    file_extensions: List[str] = [".pdf", ".txt"]
 ) -> List[Dict[str, Any]]:
     """
     Ingest COI PDF files from local storage or S3
@@ -76,6 +80,10 @@ def _ingest_s3_files(s3_bucket: str, s3_prefix: str, file_extensions: List[str])
     """Ingest PDF files from S3 bucket"""
     pdf_files = []
     
+    if boto3 is None:
+        logger.error("boto3 is not available. Install it with: pip install boto3")
+        raise ImportError("boto3 is required for S3 functionality")
+    
     try:
         s3_client = boto3.client('s3')
         
@@ -105,7 +113,7 @@ def _ingest_s3_files(s3_bucket: str, s3_prefix: str, file_extensions: List[str])
                         "last_modified": obj['LastModified'].timestamp()
                     })
         
-    except ClientError as e:
+    except Exception as e:
         logger.error(f"Error accessing S3 bucket {s3_bucket}: {e}")
         raise
     

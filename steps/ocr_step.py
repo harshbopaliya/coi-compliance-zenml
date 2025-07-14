@@ -11,7 +11,10 @@ from pathlib import Path
 import easyocr
 import PyPDF2
 from PIL import Image
-import pdf2image
+try:
+    import pdf2image
+except ImportError:
+    pdf2image = None
 from zenml import step
 from zenml.logger import get_logger
 
@@ -49,18 +52,24 @@ def extract_text_from_pdf(
         logger.info(f"Processing PDF: {pdf_file['file_name']}")
         
         try:
-            # First, try to extract text directly from PDF
-            direct_text = _extract_text_direct(pdf_file['file_path'])
-            
-            # If direct text extraction yields little content, use OCR
-            if len(direct_text.strip()) < 100 and use_ocr:
-                logger.info(f"Direct text extraction insufficient, using OCR for {pdf_file['file_name']}")
-                ocr_text = _extract_text_ocr(pdf_file['file_path'], reader)
-                extracted_text = ocr_text
-                extraction_method = "ocr"
+            # Check if it's a text file
+            if pdf_file['file_path'].endswith('.txt'):
+                with open(pdf_file['file_path'], 'r', encoding='utf-8') as f:
+                    extracted_text = f.read()
+                extraction_method = "text"
             else:
-                extracted_text = direct_text
-                extraction_method = "direct"
+                # First, try to extract text directly from PDF
+                direct_text = _extract_text_direct(pdf_file['file_path'])
+                
+                # If direct text extraction yields little content, use OCR
+                if len(direct_text.strip()) < 100 and use_ocr:
+                    logger.info(f"Direct text extraction insufficient, using OCR for {pdf_file['file_name']}")
+                    ocr_text = _extract_text_ocr(pdf_file['file_path'], reader)
+                    extracted_text = ocr_text
+                    extraction_method = "ocr"
+                else:
+                    extracted_text = direct_text
+                    extraction_method = "direct"
             
             extracted_texts.append({
                 "file_name": pdf_file['file_name'],
@@ -110,6 +119,10 @@ def _extract_text_direct(pdf_path: str) -> str:
 def _extract_text_ocr(pdf_path: str, reader) -> str:
     """Extract text from PDF using OCR"""
     text = ""
+    
+    if pdf2image is None:
+        logger.error("pdf2image is not available. Install it with: pip install pdf2image")
+        raise ImportError("pdf2image is required for OCR functionality")
     
     try:
         # Convert PDF to images

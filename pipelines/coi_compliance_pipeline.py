@@ -39,11 +39,11 @@ def coi_compliance_pipeline(
     extracted_text = extract_text_from_pdf(pdf_files=pdf_files)
     
     # Step 3: Parse insurance fields
-    parsed_fields = parse_insurance_fields(extracted_text=extracted_text)
+    parsed_fields = parse_insurance_fields(extracted_texts=extracted_text)
     
     # Step 4: Validate compliance
     compliance_results = validate_compliance(
-        parsed_fields=parsed_fields,
+        parsed_results=parsed_fields,
         rules_path=compliance_rules_path
     )
     
